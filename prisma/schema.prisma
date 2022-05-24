@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model game {
+  id          Int    @id @default(autoincrement())
+  team1Points Int    @default(0)
+  team2Points Int    @default(0)
+  user        user[]
+}
+
+model user {
+  id     Int    @id @default(autoincrement())
+  name   String @db.VarChar(255)
+  team   String @db.VarChar(255)
+  roomID Int
+  gameID Int
+  game   game   @relation(fields: [gameID], references: [id], onDelete: Cascade, map: "fk_user_game")
+
+  @@index([gameID], map: "fk_user_game")
+}
