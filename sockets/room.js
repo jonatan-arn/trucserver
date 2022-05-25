@@ -13,12 +13,10 @@ module.exports = function (io) {
     socket.on("create:room", (data) => {
       //Generate room id
       let roomID = "" + Math.floor(Math.random() * 90) + 100;
-
       //Check if room id already use and generate other in case
       let checkRoom = io.sockets.adapter.rooms.get(roomID);
       if (checkRoom == undefined) socket.join(roomID);
       while (checkRoom != undefined) {
-        console.log("redo roomID");
         roomID = "" + Math.floor(Math.random() * 90000) + 10000;
         checkRoom = io.sockets.adapter.rooms.get(roomID);
       }
@@ -96,18 +94,11 @@ module.exports = function (io) {
     socket.on("leave:room", (data) => {
       const lobbyID = String(socket.data.room);
 
-      //Remove player from players array
-      let players = [];
-      for (let p of data.players) {
-        if (p.id != socket.id) players.push(p);
-      }
-
       //Player leave room
       socket.leave(lobbyID);
 
       //Emit player leave with new players array and the player who leave
       io.to(lobbyID).emit("leave:player", {
-        players: players,
         socketLeave: socket.data,
       });
     });
