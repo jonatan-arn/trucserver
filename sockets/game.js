@@ -14,5 +14,9 @@ module.exports = function (io) {
       io.to(data.me.id).emit("await:response:start");
       io.to(data.top.id).emit("await:response:start");
     });
+    socket.on("start:game", (data) => {
+      const lobbyID = String(socket.data.room);
+      io.to(lobbyID).emit("start:game:client");
+    });
   });
 };
