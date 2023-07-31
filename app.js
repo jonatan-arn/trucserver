@@ -33,7 +33,7 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-require("./routes")(app);
+//require("./routes")(app);
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
