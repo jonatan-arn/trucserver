@@ -4,8 +4,13 @@ module.exports = function (io) {
     //Emit success on conected
     socket.emit("connected", { id: socket.id });
     //On disconected disconect socket and leave room
-    socket.on("disconnected", () => {
+    socket.on("disconnect", () => {
       socket.leave(socket.data.room);
+      const lobbyID = String(socket.data.room);
+
+      io.to(lobbyID).emit("leave:player", {
+        socketLeave: socket.data,
+      });
       socket.disconnect();
     });
 
